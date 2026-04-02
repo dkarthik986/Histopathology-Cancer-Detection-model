@@ -54,6 +54,15 @@ def load_trained_model() -> tf.keras.Model:
     return tf.keras.models.load_model(MODEL_PATH, compile=False)
 
 
+def configure_tensorflow_runtime() -> None:
+    try:
+        tf.config.threading.set_inter_op_parallelism_threads(1)
+        tf.config.threading.set_intra_op_parallelism_threads(1)
+    except RuntimeError:
+        # TensorFlow may already be initialized in some environments.
+        pass
+
+
 def human_label_from_score(score: float) -> str:
     return "Cancer" if score >= 0.5 else "Benign"
 
