@@ -1,0 +1,14 @@
+{
+  "model_path": "D:\\COLLEGE PROJECTS\\Histopathology-image-cancer-prediction-main\\model\\model.h5",
+  "image_size": [
+    96,
+    96
+  ],
+  "class_names": [
+    "benign",
+    "cancer"
+  ],
+  "source_dataset": "1aurent/PatchCamelyon",
+  "test_loss": 0.457415,
+  "test_accuracy": 0.81
+}

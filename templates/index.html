@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histopathology Cancer Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="app-shell">
+  <div class="page-glow page-glow-left"></div>
+  <div class="page-glow page-glow-right"></div>
+
+  <main class="layout">
+    <section class="hero-panel">
+      <p class="eyebrow">Clinical Image Screening</p>
+      <h1>Histopathology Cancer Detection</h1>
+      <p class="hero-copy">
+        Upload a tissue patch and run it through the trained CNN. The app automatically
+        resizes the image to the same <strong>96 x 96 RGB</strong> shape used during training.
+      </p>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <span class="info-label">Model</span>
+          <strong>TensorFlow CNN</strong>
+          <p>Retrained from scratch on public PatchCamelyon data.</p>
+        </article>
+        <article class="info-card">
+          <span class="info-label">Classes</span>
+          <strong>Benign / Cancer</strong>
+          <p>Binary classification with consistent preprocessing across training and inference.</p>
+        </article>
+        <article class="info-card">
+          <span class="info-label">Input</span>
+          <strong>Any image file</strong>
+          <p>The uploaded file is normalized by the same shared preprocessing utility.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="upload-panel">
+      <div class="panel-header">
+        <p class="eyebrow">Upload Sample</p>
+        <h2>Run a new prediction</h2>
+      </div>
+
+      {% if error %}
+      <div class="alert-box">{{ error }}</div>
+      {% endif %}
+
+      <form class="upload-form" method="POST" enctype="multipart/form-data">
+        <label class="file-dropzone" for="image">
+          <input id="image" type="file" name="image" accept="image/*" required>
+          <span class="dropzone-title">Choose a histopathology image</span>
+          <span class="dropzone-copy">PNG, JPG, or other image formats supported by Pillow.</span>
+        </label>
+
+        <button type="submit" class="primary-button">Analyze Image</button>
+      </form>
+
+      <div class="panel-note">
+        <span class="note-dot"></span>
+        Preprocessing is shared by training, CLI prediction, and the Flask app.
+      </div>
+    </section>
+  </main>
+</body>
+</html>

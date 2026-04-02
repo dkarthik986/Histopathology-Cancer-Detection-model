@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediction Result</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="app-shell">
+  <div class="page-glow page-glow-left"></div>
+  <div class="page-glow page-glow-right"></div>
+
+  <main class="layout layout-single">
+    <section class="result-panel">
+      <p class="eyebrow">Prediction Complete</p>
+      <h1>Inference Summary</h1>
+      <p class="hero-copy">
+        The uploaded image was resized to the training shape and passed through the saved model.
+      </p>
+
+      <div class="result-pill {% if label == 'Cancer' %}pill-danger{% else %}pill-safe{% endif %}">
+        {{ label }}
+      </div>
+
+      <div class="metrics-grid">
+        <article class="metric-card">
+          <span class="metric-label">Confidence</span>
+          <strong>{{ confidence }}</strong>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Cancer Probability</span>
+          <strong>{{ cancer_probability }}</strong>
+        </article>
+        <article class="metric-card metric-card-wide">
+          <span class="metric-label">File</span>
+          <strong>{{ filename }}</strong>
+        </article>
+      </div>
+
+      <a class="secondary-button" href="/">Analyze another image</a>
+    </section>
+  </main>
+</body>
+</html>
