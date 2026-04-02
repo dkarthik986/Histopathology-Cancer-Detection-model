@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 import json
 from pathlib import Path
 
@@ -30,8 +31,14 @@ def ensure_directories() -> None:
             (DATA_DIR / split_name / class_name).mkdir(parents=True, exist_ok=True)
 
 
-def preprocess_image(image_path: str | Path) -> np.ndarray:
-    with Image.open(image_path) as image:
+def preprocess_image(image_source: str | Path | bytes | io.BufferedIOBase) -> np.ndarray:
+    if isinstance(image_source, bytes):
+        image_source = io.BytesIO(image_source)
+
+    if hasattr(image_source, "seek"):
+        image_source.seek(0)
+
+    with Image.open(image_source) as image:
         image = image.convert("RGB").resize(IMAGE_SIZE)
         image_array = np.asarray(image, dtype=np.float32)
 
@@ -53,6 +60,16 @@ def human_label_from_score(score: float) -> str:
 
 def confidence_from_score(score: float) -> float:
     return score if score >= 0.5 else 1.0 - score
+
+
+def predict_score(model: tf.keras.Model, image_batch: np.ndarray) -> float:
+    predictions = model(image_batch, training=False).numpy()
+    return float(predictions.reshape(-1)[0])
+
+
+def warm_up_model(model: tf.keras.Model) -> None:
+    dummy_batch = np.zeros((1,) + IMAGE_SIZE + (3,), dtype=np.float32)
+    _ = predict_score(model, dummy_batch)
 
 
 def save_model_metadata(test_loss: float, test_accuracy: float) -> None:
